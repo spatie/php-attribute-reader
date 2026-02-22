@@ -45,10 +45,10 @@ class Attributes
      * @template T of object
      *
      * @param  class-string|object  $class
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return array<T>
      */
-    public static function getAllOnMethod(string|object $class, string $method, string $attribute): array
+    public static function getAllOnMethod(string|object $class, string $method, ?string $attribute = null): array
     {
         $reflection = self::reflect($class);
 
@@ -56,17 +56,17 @@ class Attributes
             return [];
         }
 
-        return self::instantiateAll($reflection->getMethod($method)->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF));
+        return self::instantiateAll($reflection->getMethod($method)->getAttributes(...self::attributeArgs($attribute)));
     }
 
     /**
      * @template T of object
      *
      * @param  class-string|object  $class
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return array<T>
      */
-    public static function getAllOnProperty(string|object $class, string $property, string $attribute): array
+    public static function getAllOnProperty(string|object $class, string $property, ?string $attribute = null): array
     {
         $reflection = self::reflect($class);
 
@@ -74,17 +74,17 @@ class Attributes
             return [];
         }
 
-        return self::instantiateAll($reflection->getProperty($property)->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF));
+        return self::instantiateAll($reflection->getProperty($property)->getAttributes(...self::attributeArgs($attribute)));
     }
 
     /**
      * @template T of object
      *
      * @param  class-string|object  $class
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return array<T>
      */
-    public static function getAllOnConstant(string|object $class, string $constant, string $attribute): array
+    public static function getAllOnConstant(string|object $class, string $constant, ?string $attribute = null): array
     {
         $reflection = self::reflect($class);
 
@@ -92,17 +92,17 @@ class Attributes
             return [];
         }
 
-        return self::instantiateAll($reflection->getReflectionConstant($constant)->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF));
+        return self::instantiateAll($reflection->getReflectionConstant($constant)->getAttributes(...self::attributeArgs($attribute)));
     }
 
     /**
      * @template T of object
      *
      * @param  class-string|object  $class
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return array<T>
      */
-    public static function getAllOnParameter(string|object $class, string $method, string $parameter, string $attribute): array
+    public static function getAllOnParameter(string|object $class, string $method, string $parameter, ?string $attribute = null): array
     {
         $reflection = self::reflect($class);
 
@@ -110,17 +110,17 @@ class Attributes
             return [];
         }
 
-        return self::instantiateAll(self::findParameter($reflection->getMethod($method), $parameter)?->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF) ?? []);
+        return self::instantiateAll(self::findParameter($reflection->getMethod($method), $parameter)?->getAttributes(...self::attributeArgs($attribute)) ?? []);
     }
 
     /**
      * @template T of object
      *
      * @param  class-string|object  $class
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return T|null
      */
-    public static function onMethod(string|object $class, string $method, string $attribute): ?object
+    public static function onMethod(string|object $class, string $method, ?string $attribute = null): ?object
     {
         $reflection = self::reflect($class);
 
@@ -128,17 +128,17 @@ class Attributes
             return null;
         }
 
-        return self::firstFrom($reflection->getMethod($method)->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF));
+        return self::firstFrom($reflection->getMethod($method)->getAttributes(...self::attributeArgs($attribute)));
     }
 
     /**
      * @template T of object
      *
      * @param  class-string|object  $class
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return T|null
      */
-    public static function onProperty(string|object $class, string $property, string $attribute): ?object
+    public static function onProperty(string|object $class, string $property, ?string $attribute = null): ?object
     {
         $reflection = self::reflect($class);
 
@@ -146,17 +146,17 @@ class Attributes
             return null;
         }
 
-        return self::firstFrom($reflection->getProperty($property)->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF));
+        return self::firstFrom($reflection->getProperty($property)->getAttributes(...self::attributeArgs($attribute)));
     }
 
     /**
      * @template T of object
      *
      * @param  class-string|object  $class
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return T|null
      */
-    public static function onConstant(string|object $class, string $constant, string $attribute): ?object
+    public static function onConstant(string|object $class, string $constant, ?string $attribute = null): ?object
     {
         $reflection = self::reflect($class);
 
@@ -164,17 +164,17 @@ class Attributes
             return null;
         }
 
-        return self::firstFrom($reflection->getReflectionConstant($constant)->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF));
+        return self::firstFrom($reflection->getReflectionConstant($constant)->getAttributes(...self::attributeArgs($attribute)));
     }
 
     /**
      * @template T of object
      *
      * @param  class-string|object  $class
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return T|null
      */
-    public static function onParameter(string|object $class, string $method, string $parameter, string $attribute): ?object
+    public static function onParameter(string|object $class, string $method, string $parameter, ?string $attribute = null): ?object
     {
         $reflection = self::reflect($class);
 
@@ -182,7 +182,7 @@ class Attributes
             return null;
         }
 
-        return self::firstFrom(self::findParameter($reflection->getMethod($method), $parameter)?->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF) ?? []);
+        return self::firstFrom(self::findParameter($reflection->getMethod($method), $parameter)?->getAttributes(...self::attributeArgs($attribute)) ?? []);
     }
 
     /**
@@ -207,7 +207,7 @@ class Attributes
     {
         $reflection = self::reflect($class);
         $results = [];
-        $args = $attribute !== null ? [$attribute, ReflectionAttribute::IS_INSTANCEOF] : [];
+        $args = self::attributeArgs($attribute);
 
         foreach ($reflection->getAttributes(...$args) as $attr) {
             $results[] = new AttributeTarget($attr->newInstance(), $reflection, $reflection->getName());
@@ -264,6 +264,14 @@ class Attributes
     protected static function instantiateAll(array $attributes): array
     {
         return array_map(fn (ReflectionAttribute $attr) => $attr->newInstance(), $attributes);
+    }
+
+    /**
+     * @return array{}|array{class-string, int}
+     */
+    protected static function attributeArgs(?string $attribute): array
+    {
+        return $attribute !== null ? [$attribute, ReflectionAttribute::IS_INSTANCEOF] : [];
     }
 
     protected static function findParameter(\ReflectionMethod $method, string $name): ?\ReflectionParameter

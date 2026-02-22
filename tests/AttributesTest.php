@@ -133,6 +133,38 @@ it('returns empty array for getAllOnParameter with non-existent parameter', func
     expect(Attributes::getAllOnParameter(TestClass::class, 'handle', 'nonExistent', RepeatableTag::class))->toBeEmpty();
 });
 
+// getAllOnMethod without filter
+
+it('can get all attributes from a method without filtering', function () {
+    $attributes = Attributes::getAllOnMethod(TestClass::class, 'handle');
+
+    expect($attributes)->toHaveCount(3);
+});
+
+// getAllOnProperty without filter
+
+it('can get all attributes from a property without filtering', function () {
+    $attributes = Attributes::getAllOnProperty(TestClass::class, 'name');
+
+    expect($attributes)->toHaveCount(3);
+});
+
+// getAllOnConstant without filter
+
+it('can get all attributes from a constant without filtering', function () {
+    $attributes = Attributes::getAllOnConstant(TestClass::class, 'STATUS_ACTIVE');
+
+    expect($attributes)->toHaveCount(3);
+});
+
+// getAllOnParameter without filter
+
+it('can get all attributes from a parameter without filtering', function () {
+    $attributes = Attributes::getAllOnParameter(TestClass::class, 'handle', 'request');
+
+    expect($attributes)->toHaveCount(3);
+});
+
 // onMethod
 
 it('can get an attribute from a method', function () {
@@ -195,6 +227,32 @@ it('returns null for a non-existent parameter', function () {
 
 it('returns null for a non-existent method on parameter lookup', function () {
     expect(Attributes::onParameter(TestClass::class, 'nonExistent', 'request', ParameterAttribute::class))->toBeNull();
+});
+
+// on* without filter
+
+it('can get the first attribute from a method without filtering', function () {
+    $attribute = Attributes::onMethod(TestClass::class, 'handle');
+
+    expect($attribute)->toBeInstanceOf(MethodAttribute::class);
+});
+
+it('can get the first attribute from a property without filtering', function () {
+    $attribute = Attributes::onProperty(TestClass::class, 'name');
+
+    expect($attribute)->toBeInstanceOf(PropertyAttribute::class);
+});
+
+it('can get the first attribute from a constant without filtering', function () {
+    $attribute = Attributes::onConstant(TestClass::class, 'STATUS_ACTIVE');
+
+    expect($attribute)->toBeInstanceOf(ConstantAttribute::class);
+});
+
+it('can get the first attribute from a parameter without filtering', function () {
+    $attribute = Attributes::onParameter(TestClass::class, 'handle', 'request');
+
+    expect($attribute)->toBeInstanceOf(ParameterAttribute::class);
 });
 
 // onFunction

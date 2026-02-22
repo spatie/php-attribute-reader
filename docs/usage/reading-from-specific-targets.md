@@ -128,6 +128,28 @@ Attributes::getAllOnConstant($class, $constant, $attribute);  // array
 Attributes::getAllOnParameter($class, $method, $parameter, $attribute); // array
 ```
 
+## Getting all attributes without filtering
+
+All `on*` and `getAllOn*` methods accept an optional attribute parameter. When omitted, they return all attributes on that target regardless of type:
+
+```php
+// Get the first attribute on a method (any type)
+$attribute = Attributes::onMethod(UserController::class, 'index');
+
+// Get all attributes on a property
+$attributes = Attributes::getAllOnProperty(UserController::class, 'email');
+
+// Works on all targets
+Attributes::onProperty($class, $property);
+Attributes::onConstant($class, $constant);
+Attributes::onParameter($class, $method, $parameter);
+
+Attributes::getAllOnMethod($class, $method);
+Attributes::getAllOnProperty($class, $property);
+Attributes::getAllOnConstant($class, $constant);
+Attributes::getAllOnParameter($class, $method, $parameter);
+```
+
 ## Missing targets
 
 The `on*` methods return `null` when the target doesn't exist or lacks the attribute. The `getAllOn*` methods return an empty array. No exceptions are thrown.
