@@ -1,46 +1,56 @@
-# A clean API for working with PHP attributes
+<div align="left">
+
+<h1>A clean API for working with PHP attributes</h1>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/php-attribute-reader.svg?style=flat-square)](https://packagist.org/packages/spatie/php-attribute-reader)
-[![Tests](https://github.com/spatie/php-attribute-reader/actions/workflows/run-tests-pest.yml/badge.svg)](https://github.com/spatie/php-attribute-reader/actions/workflows/run-tests-pest.yml)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/spatie/php-attribute-reader/run-tests-pest.yml?branch=main&label=tests&style=flat-square)](https://github.com/spatie/php-attribute-reader/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/spatie/php-attribute-reader/fix-php-code-style-issues-pint.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/spatie/php-attribute-reader/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/spatie/php-attribute-reader.svg?style=flat-square)](https://packagist.org/packages/spatie/php-attribute-reader)
 
-PHP's native attribute reflection API is verbose. There's no `hasAttribute()`, no `getAttribute()` returning a single instance, no way to search all class members without nested foreach loops. This package fills the gap.
+</div>
 
-## Installation
+PHP 8.0 introduced attributes, but the reflection API to actually read them is verbose and awkward. Want to check if a class has a specific attribute? That's four lines. Want to find every occurrence of an attribute across a class, its methods, properties, constants, and parameters? That's 40+ lines of nested foreach loops.
 
-```bash
-composer require spatie/php-attribute-reader
-```
-
-## Usage
+This package gives you a clean, static API instead:
 
 ```php
 use Spatie\Attributes\Attributes;
 
-// Class-level
-Attributes::get(MyClass::class, MyAttribute::class);      // ?MyAttribute
-Attributes::has(MyClass::class, MyAttribute::class);       // bool
-Attributes::getAll(MyClass::class, MyAttribute::class);    // array<MyAttribute>
+// Get a single attribute from a class
+$route = Attributes::get(MyController::class, Route::class);
 
-// Specific targets
-Attributes::onMethod(MyClass::class, 'handle', MyAttribute::class);
-Attributes::onProperty(MyClass::class, 'name', MyAttribute::class);
-Attributes::onConstant(MyClass::class, 'STATUS', MyAttribute::class);
-Attributes::onParameter(MyClass::class, 'handle', 'request', MyAttribute::class);
-Attributes::onFunction('myFunction', MyAttribute::class);
+// Check if a class has an attribute
+Attributes::has(MyController::class, Route::class); // true
 
-// Discovery: find everywhere in a class
-$results = Attributes::find(MyClass::class, MyAttribute::class); // array<AttributeTarget>
-// Each result: ->attribute, ->target (Reflection*), ->name (string)
+// Read from methods, properties, constants, parameters
+Attributes::onMethod(MyController::class, 'index', Route::class);
+Attributes::onProperty(User::class, 'email', Column::class);
+Attributes::onConstant(Status::class, 'ACTIVE', Label::class);
+Attributes::onParameter(MyController::class, 'show', 'id', FromRoute::class);
 
-// All methods accept objects too
-Attributes::get($object, MyAttribute::class);
+// Find an attribute everywhere in a class at once
+$results = Attributes::find(MyForm::class, Validate::class);
+
+foreach ($results as $result) {
+    $result->attribute; // The instantiated attribute
+    $result->target;    // The Reflection object
+    $result->name;      // e.g. 'email', 'handle.request'
+}
 ```
 
-Key behaviors:
-- Uses `IS_INSTANCEOF` by default (child attributes match parent queries)
-- Always returns instantiated attributes (no `->newInstance()` needed)
-- Returns `null` for missing targets (no exceptions)
-- PHPDoc `@template` generics for IDE type inference
+Every method returns instantiated attribute objects, missing targets return `null` instead of throwing exceptions, and child attributes are matched automatically.
+
+## Support us
+
+[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/php-attribute-reader.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/php-attribute-reader)
+
+We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+
+We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+
+## Documentation
+
+All documentation is available [on our documentation site](https://spatie.be/docs/php-attribute-reader).
 
 ## Testing
 
@@ -51,6 +61,19 @@ composer test
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTING.md) for details.
+
+## Security Vulnerabilities
+
+Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+
+## Credits
+
+- [Freek Van der Herten](https://github.com/freekmurze)
+- [All Contributors](../../contributors)
 
 ## License
 
