@@ -21,7 +21,6 @@
         "php": "^8.0"
     },
     "require-dev": {
-        "laravel/pint": "^1.25",
         "pestphp/pest": "^1.0|^2.0|^3.0|^4.0"
     },
     "autoload": {
@@ -39,8 +38,7 @@
     },
     "scripts": {
         "test": "vendor/bin/pest --colors=always",
-        "test-coverage": "vendor/bin/pest --coverage-html coverage",
-        "format": "vendor/bin/pint"
+        "test-coverage": "vendor/bin/pest --coverage-html coverage"
     },
     "config": {
         "sort-packages": true,
