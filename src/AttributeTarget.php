@@ -9,7 +9,7 @@ use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
 
-readonly class AttributeTarget
+class AttributeTarget
 {
     public function __construct(
         public object $attribute,
