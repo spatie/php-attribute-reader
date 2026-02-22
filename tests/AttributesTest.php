@@ -200,6 +200,30 @@ it('find returns empty array for class without matching attributes', function ()
     expect(Attributes::find(PlainClass::class, SimpleAttribute::class))->toBeEmpty();
 });
 
+it('can find all attributes without filtering by type', function () {
+    $results = Attributes::find(TestClass::class);
+
+    expect($results)
+        ->toHaveCount(11)
+        ->each->toBeInstanceOf(AttributeTarget::class);
+
+    $attributeClasses = array_map(fn (AttributeTarget $r) => get_class($r->attribute), $results);
+
+    expect($attributeClasses)->toContain(
+        SimpleAttribute::class,
+        RepeatableAttribute::class,
+        MethodAttribute::class,
+        PropertyAttribute::class,
+        ConstantAttribute::class,
+        ParameterAttribute::class,
+        MultiTargetAttribute::class,
+    );
+});
+
+it('find without filter returns empty array for plain class', function () {
+    expect(Attributes::find(PlainClass::class))->toBeEmpty();
+});
+
 // object instances
 
 it('works with object instances for all methods', function () {

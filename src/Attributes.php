@@ -26,7 +26,7 @@ class Attributes
      */
     public static function has(string|object $class, string $attribute): bool
     {
-        return self::get($class, $attribute) !== null;
+        return self::reflect($class)->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF) !== [];
     }
 
     /**
@@ -128,38 +128,39 @@ class Attributes
      * @template T of object
      *
      * @param  class-string|object  $class
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return array<AttributeTarget>
      */
-    public static function find(string|object $class, string $attribute): array
+    public static function find(string|object $class, ?string $attribute = null): array
     {
         $reflection = self::reflect($class);
         $results = [];
+        $args = $attribute !== null ? [$attribute, ReflectionAttribute::IS_INSTANCEOF] : [];
 
-        foreach ($reflection->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF) as $attr) {
+        foreach ($reflection->getAttributes(...$args) as $attr) {
             $results[] = new AttributeTarget($attr->newInstance(), $reflection, $reflection->getName());
         }
 
         foreach ($reflection->getMethods() as $method) {
-            foreach ($method->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF) as $attr) {
+            foreach ($method->getAttributes(...$args) as $attr) {
                 $results[] = new AttributeTarget($attr->newInstance(), $method, $method->getName());
             }
 
             foreach ($method->getParameters() as $parameter) {
-                foreach ($parameter->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF) as $attr) {
+                foreach ($parameter->getAttributes(...$args) as $attr) {
                     $results[] = new AttributeTarget($attr->newInstance(), $parameter, $method->getName().'.'.$parameter->getName());
                 }
             }
         }
 
         foreach ($reflection->getProperties() as $property) {
-            foreach ($property->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF) as $attr) {
+            foreach ($property->getAttributes(...$args) as $attr) {
                 $results[] = new AttributeTarget($attr->newInstance(), $property, $property->getName());
             }
         }
 
         foreach ($reflection->getReflectionConstants() as $constant) {
-            foreach ($constant->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF) as $attr) {
+            foreach ($constant->getAttributes(...$args) as $attr) {
                 $results[] = new AttributeTarget($attr->newInstance(), $constant, $constant->getName());
             }
         }
