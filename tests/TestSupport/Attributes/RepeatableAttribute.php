@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Attributes\Tests\Fixtures\Attributes;
+namespace Spatie\Attributes\Tests\TestSupport\Attributes;
 
 use Attribute;
 

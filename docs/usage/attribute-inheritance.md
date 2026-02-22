@@ -46,4 +46,4 @@ $cache = Attributes::get(ProductCatalog::class, AggressiveCache::class);
 $cache->ttl; // 86400
 ```
 
-This applies to all methods: `get()`, `has()`, `getAll()`, `onMethod()`, `onProperty()`, `onConstant()`, `onParameter()`, `onFunction()`, and `find()`.
+This applies to all methods: `get()`, `has()`, `getAll()`, `onMethod()`, `onProperty()`, `onConstant()`, `onParameter()`, `getAllOnMethod()`, `getAllOnProperty()`, `getAllOnConstant()`, `getAllOnParameter()`, `onFunction()`, and `find()`.

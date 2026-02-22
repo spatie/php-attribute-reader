@@ -20,7 +20,7 @@ class User {}
 
 ## Getting an attribute
 
-Use `get()` to retrieve a single attribute instance from a class. It returns `null` if the attribute is not present.
+Use `get()` to retrieve a single attribute instance from a class. Returns `null` if the attribute is not present.
 
 ```php
 use Spatie\Attributes\Attributes;
@@ -41,7 +41,7 @@ Attributes::has(User::class, SomeOtherAttribute::class); // false
 
 ## Repeated attributes
 
-If an attribute is marked as `IS_REPEATABLE`, use `getAll()` to retrieve all instances:
+If an attribute is marked as `IS_REPEATABLE`, use `getAll()` to retrieve all instances. Returns an empty array when no matching attributes exist.
 
 ```php
 #[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]

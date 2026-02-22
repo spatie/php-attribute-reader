@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Attributes\Tests\Fixtures;
+namespace Spatie\Attributes\Tests\TestSupport;
 
 class PlainClass
 {

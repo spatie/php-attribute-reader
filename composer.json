@@ -34,7 +34,7 @@
             "Spatie\\Attributes\\Tests\\": "tests"
         },
         "files": [
-            "tests/Fixtures/TestFunction.php"
+            "tests/TestSupport/TestFunction.php"
         ]
     },
     "scripts": {

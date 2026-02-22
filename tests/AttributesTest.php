@@ -2,17 +2,18 @@
 
 use Spatie\Attributes\Attributes;
 use Spatie\Attributes\AttributeTarget;
-use Spatie\Attributes\Tests\Fixtures\Attributes\ChildAttribute;
-use Spatie\Attributes\Tests\Fixtures\Attributes\ConstantAttribute;
-use Spatie\Attributes\Tests\Fixtures\Attributes\MethodAttribute;
-use Spatie\Attributes\Tests\Fixtures\Attributes\MultiTargetAttribute;
-use Spatie\Attributes\Tests\Fixtures\Attributes\ParameterAttribute;
-use Spatie\Attributes\Tests\Fixtures\Attributes\PropertyAttribute;
-use Spatie\Attributes\Tests\Fixtures\Attributes\RepeatableAttribute;
-use Spatie\Attributes\Tests\Fixtures\Attributes\SimpleAttribute;
-use Spatie\Attributes\Tests\Fixtures\ChildTestClass;
-use Spatie\Attributes\Tests\Fixtures\PlainClass;
-use Spatie\Attributes\Tests\Fixtures\TestClass;
+use Spatie\Attributes\Tests\TestSupport\Attributes\ChildAttribute;
+use Spatie\Attributes\Tests\TestSupport\Attributes\ConstantAttribute;
+use Spatie\Attributes\Tests\TestSupport\Attributes\MethodAttribute;
+use Spatie\Attributes\Tests\TestSupport\Attributes\MultiTargetAttribute;
+use Spatie\Attributes\Tests\TestSupport\Attributes\ParameterAttribute;
+use Spatie\Attributes\Tests\TestSupport\Attributes\PropertyAttribute;
+use Spatie\Attributes\Tests\TestSupport\Attributes\RepeatableAttribute;
+use Spatie\Attributes\Tests\TestSupport\Attributes\RepeatableTag;
+use Spatie\Attributes\Tests\TestSupport\Attributes\SimpleAttribute;
+use Spatie\Attributes\Tests\TestSupport\ChildTestClass;
+use Spatie\Attributes\Tests\TestSupport\PlainClass;
+use Spatie\Attributes\Tests\TestSupport\TestClass;
 
 // get
 
@@ -58,6 +59,78 @@ it('can get all repeated attributes', function () {
 
 it('returns empty array when no repeated attributes exist', function () {
     expect(Attributes::getAll(PlainClass::class, RepeatableAttribute::class))->toBeEmpty();
+});
+
+// getAllOnMethod
+
+it('can get all repeated attributes from a method', function () {
+    $attributes = Attributes::getAllOnMethod(TestClass::class, 'handle', RepeatableTag::class);
+
+    expect($attributes)
+        ->toHaveCount(2)
+        ->sequence(
+            fn ($attr) => $attr->tag->toBe('method-a'),
+            fn ($attr) => $attr->tag->toBe('method-b'),
+        );
+});
+
+it('returns empty array for getAllOnMethod with non-existent method', function () {
+    expect(Attributes::getAllOnMethod(TestClass::class, 'nonExistent', RepeatableTag::class))->toBeEmpty();
+});
+
+// getAllOnProperty
+
+it('can get all repeated attributes from a property', function () {
+    $attributes = Attributes::getAllOnProperty(TestClass::class, 'name', RepeatableTag::class);
+
+    expect($attributes)
+        ->toHaveCount(2)
+        ->sequence(
+            fn ($attr) => $attr->tag->toBe('prop-a'),
+            fn ($attr) => $attr->tag->toBe('prop-b'),
+        );
+});
+
+it('returns empty array for getAllOnProperty with non-existent property', function () {
+    expect(Attributes::getAllOnProperty(TestClass::class, 'nonExistent', RepeatableTag::class))->toBeEmpty();
+});
+
+// getAllOnConstant
+
+it('can get all repeated attributes from a constant', function () {
+    $attributes = Attributes::getAllOnConstant(TestClass::class, 'STATUS_ACTIVE', RepeatableTag::class);
+
+    expect($attributes)
+        ->toHaveCount(2)
+        ->sequence(
+            fn ($attr) => $attr->tag->toBe('const-a'),
+            fn ($attr) => $attr->tag->toBe('const-b'),
+        );
+});
+
+it('returns empty array for getAllOnConstant with non-existent constant', function () {
+    expect(Attributes::getAllOnConstant(TestClass::class, 'NON_EXISTENT', RepeatableTag::class))->toBeEmpty();
+});
+
+// getAllOnParameter
+
+it('can get all repeated attributes from a parameter', function () {
+    $attributes = Attributes::getAllOnParameter(TestClass::class, 'handle', 'request', RepeatableTag::class);
+
+    expect($attributes)
+        ->toHaveCount(2)
+        ->sequence(
+            fn ($attr) => $attr->tag->toBe('param-a'),
+            fn ($attr) => $attr->tag->toBe('param-b'),
+        );
+});
+
+it('returns empty array for getAllOnParameter with non-existent method', function () {
+    expect(Attributes::getAllOnParameter(TestClass::class, 'nonExistent', 'request', RepeatableTag::class))->toBeEmpty();
+});
+
+it('returns empty array for getAllOnParameter with non-existent parameter', function () {
+    expect(Attributes::getAllOnParameter(TestClass::class, 'handle', 'nonExistent', RepeatableTag::class))->toBeEmpty();
 });
 
 // onMethod
@@ -127,7 +200,7 @@ it('returns null for a non-existent method on parameter lookup', function () {
 // onFunction
 
 it('can get an attribute from a function', function () {
-    $attribute = Attributes::onFunction('Spatie\\Attributes\\Tests\\Fixtures\\testFunction', MultiTargetAttribute::class);
+    $attribute = Attributes::onFunction('Spatie\\Attributes\\Tests\\TestSupport\\testFunction', MultiTargetAttribute::class);
 
     expect($attribute)
         ->toBeInstanceOf(MultiTargetAttribute::class)
@@ -135,7 +208,7 @@ it('can get an attribute from a function', function () {
 });
 
 it('returns null for a function without the attribute', function () {
-    expect(Attributes::onFunction('Spatie\\Attributes\\Tests\\Fixtures\\testFunction', SimpleAttribute::class))->toBeNull();
+    expect(Attributes::onFunction('Spatie\\Attributes\\Tests\\TestSupport\\testFunction', SimpleAttribute::class))->toBeNull();
 });
 
 // IS_INSTANCEOF inheritance
@@ -204,7 +277,7 @@ it('can find all attributes without filtering by type', function () {
     $results = Attributes::find(TestClass::class);
 
     expect($results)
-        ->toHaveCount(11)
+        ->toHaveCount(19)
         ->each->toBeInstanceOf(AttributeTarget::class);
 
     $attributeClasses = array_map(fn (AttributeTarget $r) => get_class($r->attribute), $results);
@@ -212,6 +285,7 @@ it('can find all attributes without filtering by type', function () {
     expect($attributeClasses)->toContain(
         SimpleAttribute::class,
         RepeatableAttribute::class,
+        RepeatableTag::class,
         MethodAttribute::class,
         PropertyAttribute::class,
         ConstantAttribute::class,

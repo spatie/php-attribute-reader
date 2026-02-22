@@ -3,7 +3,7 @@ title: Discovering attributes
 weight: 3
 ---
 
-The `find()` method searches an entire class for a specific attribute — on the class itself, all methods, properties, constants, and method parameters.
+The `find()` method searches an entire class for usages of an attribute: on the class itself, all methods, properties, constants, and method parameters.
 
 ## Basic usage
 
@@ -68,4 +68,14 @@ foreach (Attributes::find(ContactForm::class, Validate::class) as $result) {
         echo $result->target->getType(); // e.g. 'string'
     }
 }
+```
+
+## Finding all attributes
+
+You can call `find()` without an attribute filter to get every attribute on a class:
+
+```php
+$results = Attributes::find(ContactForm::class);
+
+// Returns all attributes across the class, methods, properties, constants, and parameters
 ```
