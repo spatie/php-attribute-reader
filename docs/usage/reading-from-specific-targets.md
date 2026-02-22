@@ -91,7 +91,7 @@ $fromQuery->key; // 'q'
 
 ## Functions
 
-For standalone functions, use `onFunction()` with the fully qualified function name:
+For standalone functions, use `onFunction()` with the fully qualified function name. For namespaced functions, you must use the full namespace:
 
 ```php
 #[Attribute]
@@ -106,7 +106,12 @@ function oldHelper() {}
 $deprecated = Attributes::onFunction('oldHelper', Deprecated::class);
 
 $deprecated->reason; // 'Use newHelper() instead'
+
+// For namespaced functions, use the fully qualified name:
+// Attributes::onFunction('App\Helpers\oldHelper', Deprecated::class);
 ```
+
+If the function does not exist, `onFunction()` returns `null`.
 
 ## Repeated attributes
 
@@ -122,10 +127,11 @@ $middlewares[1]->name; // 'verified'
 The same pattern is available for all target types:
 
 ```php
-Attributes::getAllOnMethod($class, $method, $attribute);     // array
-Attributes::getAllOnProperty($class, $property, $attribute);  // array
-Attributes::getAllOnConstant($class, $constant, $attribute);  // array
+Attributes::getAllOnMethod($class, $method, $attribute);                // array
+Attributes::getAllOnProperty($class, $property, $attribute);            // array
+Attributes::getAllOnConstant($class, $constant, $attribute);            // array
 Attributes::getAllOnParameter($class, $method, $parameter, $attribute); // array
+Attributes::getAllOnFunction($function, $attribute);                    // array
 ```
 
 ## Getting all attributes without filtering
@@ -143,11 +149,13 @@ $attributes = Attributes::getAllOnProperty(UserController::class, 'email');
 Attributes::onProperty($class, $property);
 Attributes::onConstant($class, $constant);
 Attributes::onParameter($class, $method, $parameter);
+Attributes::onFunction($function);
 
 Attributes::getAllOnMethod($class, $method);
 Attributes::getAllOnProperty($class, $property);
 Attributes::getAllOnConstant($class, $constant);
 Attributes::getAllOnParameter($class, $method, $parameter);
+Attributes::getAllOnFunction($function);
 ```
 
 ## Missing targets

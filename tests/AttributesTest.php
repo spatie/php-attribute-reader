@@ -29,6 +29,16 @@ it('returns null when class attribute is missing', function () {
     expect(Attributes::get(PlainClass::class, SimpleAttribute::class))->toBeNull();
 });
 
+it('can get the first class attribute without filtering', function () {
+    $attribute = Attributes::get(TestClass::class);
+
+    expect($attribute)->toBeInstanceOf(SimpleAttribute::class);
+});
+
+it('returns null for get without filter on plain class', function () {
+    expect(Attributes::get(PlainClass::class))->toBeNull();
+});
+
 it('can get a class attribute from an object instance', function () {
     $attribute = Attributes::get(new TestClass, SimpleAttribute::class);
 
@@ -42,6 +52,15 @@ it('can get a class attribute from an object instance', function () {
 it('can check if a class has an attribute', function () {
     expect(Attributes::has(TestClass::class, SimpleAttribute::class))->toBeTrue();
     expect(Attributes::has(PlainClass::class, SimpleAttribute::class))->toBeFalse();
+});
+
+it('can check if a class has any attribute', function () {
+    expect(Attributes::has(TestClass::class))->toBeTrue();
+    expect(Attributes::has(PlainClass::class))->toBeFalse();
+});
+
+it('has returns true for child attributes via inheritance', function () {
+    expect(Attributes::has(ChildTestClass::class, SimpleAttribute::class))->toBeTrue();
 });
 
 // getAll
@@ -59,6 +78,16 @@ it('can get all repeated attributes', function () {
 
 it('returns empty array when no repeated attributes exist', function () {
     expect(Attributes::getAll(PlainClass::class, RepeatableAttribute::class))->toBeEmpty();
+});
+
+it('can get all class attributes without filtering', function () {
+    $attributes = Attributes::getAll(TestClass::class);
+
+    expect($attributes)->toHaveCount(3);
+});
+
+it('returns empty array for getAll without filter on plain class', function () {
+    expect(Attributes::getAll(PlainClass::class))->toBeEmpty();
 });
 
 // getAllOnMethod
@@ -179,6 +208,10 @@ it('returns null for a method without the attribute', function () {
     expect(Attributes::onMethod(TestClass::class, 'plain', MethodAttribute::class))->toBeNull();
 });
 
+it('returns null for an existing method on a plain class', function () {
+    expect(Attributes::onMethod(PlainClass::class, 'handle', MethodAttribute::class))->toBeNull();
+});
+
 it('returns null for a non-existent method', function () {
     expect(Attributes::onMethod(TestClass::class, 'nonExistent', MethodAttribute::class))->toBeNull();
 });
@@ -197,6 +230,10 @@ it('returns null for a non-existent property', function () {
     expect(Attributes::onProperty(TestClass::class, 'nonExistent', PropertyAttribute::class))->toBeNull();
 });
 
+it('returns null for an existing property without the attribute', function () {
+    expect(Attributes::onProperty(PlainClass::class, 'name', PropertyAttribute::class))->toBeNull();
+});
+
 // onConstant
 
 it('can get an attribute from a constant', function () {
@@ -209,6 +246,10 @@ it('can get an attribute from a constant', function () {
 
 it('returns null for a non-existent constant', function () {
     expect(Attributes::onConstant(TestClass::class, 'NON_EXISTENT', ConstantAttribute::class))->toBeNull();
+});
+
+it('returns null for an existing constant without the attribute', function () {
+    expect(Attributes::onConstant(PlainClass::class, 'VALUE', ConstantAttribute::class))->toBeNull();
 });
 
 // onParameter
@@ -267,6 +308,38 @@ it('can get an attribute from a function', function () {
 
 it('returns null for a function without the attribute', function () {
     expect(Attributes::onFunction('Spatie\\Attributes\\Tests\\TestSupport\\testFunction', SimpleAttribute::class))->toBeNull();
+});
+
+it('returns null for a non-existent function', function () {
+    expect(Attributes::onFunction('nonExistentFunction', MultiTargetAttribute::class))->toBeNull();
+});
+
+it('can get the first attribute from a function without filtering', function () {
+    $attribute = Attributes::onFunction('Spatie\\Attributes\\Tests\\TestSupport\\testFunction');
+
+    expect($attribute)->toBeInstanceOf(MultiTargetAttribute::class);
+});
+
+// getAllOnFunction
+
+it('can get all attributes from a function', function () {
+    $attributes = Attributes::getAllOnFunction('Spatie\\Attributes\\Tests\\TestSupport\\testFunction', MultiTargetAttribute::class);
+
+    expect($attributes)
+        ->toHaveCount(1)
+        ->sequence(
+            fn ($attr) => $attr->toBeInstanceOf(MultiTargetAttribute::class),
+        );
+});
+
+it('can get all attributes from a function without filtering', function () {
+    $attributes = Attributes::getAllOnFunction('Spatie\\Attributes\\Tests\\TestSupport\\testFunction');
+
+    expect($attributes)->toHaveCount(1);
+});
+
+it('returns empty array for getAllOnFunction with non-existent function', function () {
+    expect(Attributes::getAllOnFunction('nonExistentFunction', MultiTargetAttribute::class))->toBeEmpty();
 });
 
 // IS_INSTANCEOF inheritance
@@ -354,6 +427,13 @@ it('can find all attributes without filtering by type', function () {
 
 it('find without filter returns empty array for plain class', function () {
     expect(Attributes::find(PlainClass::class))->toBeEmpty();
+});
+
+it('find discovers child attributes via inheritance', function () {
+    $results = Attributes::find(ChildTestClass::class, SimpleAttribute::class);
+
+    expect($results)->toHaveCount(1);
+    expect($results[0]->attribute)->toBeInstanceOf(ChildAttribute::class);
 });
 
 // object instances

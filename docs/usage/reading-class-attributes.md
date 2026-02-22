@@ -60,6 +60,16 @@ $tags[0]->name; // 'featured'
 $tags[1]->name; // 'popular'
 ```
 
+## Without an attribute filter
+
+All class-level methods also accept an optional attribute parameter. When omitted, they work with any attribute:
+
+```php
+Attributes::get(User::class);    // first attribute, regardless of type
+Attributes::has(User::class);    // true if the class has any attribute
+Attributes::getAll(User::class); // all attributes on the class
+```
+
 ## Using object instances
 
 All methods accept either a class string or an object instance:

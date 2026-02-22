@@ -4,6 +4,7 @@ namespace Spatie\Attributes;
 
 use ReflectionAttribute;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionFunction;
 
 class Attributes
@@ -12,33 +13,33 @@ class Attributes
      * @template T of object
      *
      * @param  class-string|object  $class
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return T|null
      */
-    public static function get(string|object $class, string $attribute): ?object
+    public static function get(string|object $class, ?string $attribute = null): ?object
     {
-        return self::firstFrom(self::reflect($class)->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF));
+        return self::firstFrom(self::reflect($class)->getAttributes(...self::attributeArgs($attribute)));
     }
 
     /**
      * @param  class-string|object  $class
-     * @param  class-string  $attribute
+     * @param  class-string|null  $attribute
      */
-    public static function has(string|object $class, string $attribute): bool
+    public static function has(string|object $class, ?string $attribute = null): bool
     {
-        return self::reflect($class)->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF) !== [];
+        return self::reflect($class)->getAttributes(...self::attributeArgs($attribute)) !== [];
     }
 
     /**
      * @template T of object
      *
      * @param  class-string|object  $class
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return array<T>
      */
-    public static function getAll(string|object $class, string $attribute): array
+    public static function getAll(string|object $class, ?string $attribute = null): array
     {
-        return self::instantiateAll(self::reflect($class)->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF));
+        return self::instantiateAll(self::reflect($class)->getAttributes(...self::attributeArgs($attribute)));
     }
 
     /**
@@ -116,6 +117,21 @@ class Attributes
     /**
      * @template T of object
      *
+     * @param  class-string<T>|null  $attribute
+     * @return array<T>
+     */
+    public static function getAllOnFunction(string $function, ?string $attribute = null): array
+    {
+        try {
+            return self::instantiateAll((new ReflectionFunction($function))->getAttributes(...self::attributeArgs($attribute)));
+        } catch (ReflectionException) {
+            return [];
+        }
+    }
+
+    /**
+     * @template T of object
+     *
      * @param  class-string|object  $class
      * @param  class-string<T>|null  $attribute
      * @return T|null
@@ -188,12 +204,16 @@ class Attributes
     /**
      * @template T of object
      *
-     * @param  class-string<T>  $attribute
+     * @param  class-string<T>|null  $attribute
      * @return T|null
      */
-    public static function onFunction(string $function, string $attribute): ?object
+    public static function onFunction(string $function, ?string $attribute = null): ?object
     {
-        return self::firstFrom((new ReflectionFunction($function))->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF));
+        try {
+            return self::firstFrom((new ReflectionFunction($function))->getAttributes(...self::attributeArgs($attribute)));
+        } catch (ReflectionException) {
+            return null;
+        }
     }
 
     /**

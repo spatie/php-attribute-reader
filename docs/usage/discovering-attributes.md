@@ -79,3 +79,7 @@ $results = Attributes::find(ContactForm::class);
 
 // Returns all attributes across the class, methods, properties, constants, and parameters
 ```
+
+## Inherited members
+
+The `find()` method includes inherited methods, properties, and constants from parent classes. If a parent class has attributed members, they will appear in the results.
