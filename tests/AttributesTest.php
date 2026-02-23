@@ -456,6 +456,15 @@ it('can convert an attribute with default values to an array', function () {
     expect($results[0]->toArray())->toBe(['type' => 'request']);
 });
 
+it('can convert an attribute with variadic arguments to an array', function () {
+    $results = Attributes::find(
+        Spatie\Attributes\Tests\TestSupport\VariadicClass::class,
+        Spatie\Attributes\Tests\TestSupport\Attributes\VariadicAttribute::class,
+    );
+
+    expect($results[0]->toArray())->toBe(['tags' => ['featured', 'popular', 'trending']]);
+});
+
 // object instances
 
 it('works with object instances for all methods', function () {
