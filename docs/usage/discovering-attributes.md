@@ -58,6 +58,25 @@ For the example above, the results would be:
 
 For parameters, the name is formatted as `method.parameter`.
 
+## Getting attribute values as an array
+
+Use `toArray()` to get all attribute properties as a keyed array. This is useful when you don't know the attribute's structure upfront:
+
+```php
+foreach ($results as $result) {
+    $result->toArray();
+}
+```
+
+For the example above, this would return:
+
+| `->name` | `->toArray()` |
+|---|---|
+| `ContactForm` | `['rule' => 'exists:forms']` |
+| `name` | `['rule' => 'string\|max:255']` |
+| `email` | `['rule' => 'email']` |
+| `submit.data` | `['rule' => 'array']` |
+
 ## Using the reflection target
 
 The `target` property gives you direct access to the underlying reflection object, so you can inspect additional details:
