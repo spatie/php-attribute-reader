@@ -2,6 +2,14 @@
 
 All notable changes to `php-attribute-reader` will be documented in this file.
 
+## 1.1.0 - 2026-02-23
+
+### What's Changed
+
+* Add `toArray()` method to `AttributeTarget` for getting all attribute properties as a keyed array in #2
+
+**Full Changelog**: https://github.com/spatie/php-attribute-reader/compare/1.0.0...1.1.0
+
 ## 1.0.0 - 2026-02-23
 
 **Full Changelog**: https://github.com/spatie/php-attribute-reader/compare/0.0.1...1.0.0
