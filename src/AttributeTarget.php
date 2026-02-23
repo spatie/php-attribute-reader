@@ -16,4 +16,10 @@ class AttributeTarget
         public ReflectionClass|ReflectionMethod|ReflectionProperty|ReflectionClassConstant|ReflectionParameter|ReflectionFunction $target,
         public string $name,
     ) {}
+
+    /** @return array<string, mixed> */
+    public function toArray(): array
+    {
+        return get_object_vars($this->attribute);
+    }
 }

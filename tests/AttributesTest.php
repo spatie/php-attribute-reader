@@ -436,6 +436,26 @@ it('find discovers child attributes via inheritance', function () {
     expect($results[0]->attribute)->toBeInstanceOf(ChildAttribute::class);
 });
 
+// toArray
+
+it('can convert an attribute target to an array', function () {
+    $results = Attributes::find(TestClass::class, SimpleAttribute::class);
+
+    expect($results[0]->toArray())->toBe(['name' => 'test-class']);
+});
+
+it('can convert an attribute with multiple properties to an array', function () {
+    $results = Attributes::find(TestClass::class, MethodAttribute::class);
+
+    expect($results[0]->toArray())->toBe(['route' => '/handle']);
+});
+
+it('can convert an attribute with default values to an array', function () {
+    $results = Attributes::find(TestClass::class, ParameterAttribute::class);
+
+    expect($results[0]->toArray())->toBe(['type' => 'request']);
+});
+
 // object instances
 
 it('works with object instances for all methods', function () {
