@@ -3,8 +3,8 @@
 <h1>A clean API for working with PHP attributes</h1>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/php-attribute-reader.svg?style=flat-square)](https://packagist.org/packages/spatie/php-attribute-reader)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/spatie/php-attribute-reader/run-tests-pest.yml?branch=main&label=tests&style=flat-square)](https://github.com/spatie/php-attribute-reader/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/spatie/php-attribute-reader/fix-php-code-style-issues-pint.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/spatie/php-attribute-reader/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![GitHub Tests Action Status](https://github.com/spatie/php-attribute-reader/actions/workflows/run-tests-pest.yml/badge.svg)](https://github.com/spatie/php-attribute-reader/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://github.com/spatie/php-attribute-reader/actions/workflows/fix-php-code-style-issues-pint.yml/badge.svg)](https://github.com/spatie/php-attribute-reader/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/php-attribute-reader.svg?style=flat-square)](https://packagist.org/packages/spatie/php-attribute-reader)
 
 </div>
