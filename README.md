@@ -42,7 +42,7 @@ Every method returns instantiated attribute objects, missing targets return `nul
 
 ## Support us
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/php-attribute-reader.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/php-attribute-reader)
+[<img src="https://spatie.be/github-ad-image/php-attribute-reader.jpg" width="419px" />](https://spatie.be/github-ad-click/php-attribute-reader)
 
 We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
 
