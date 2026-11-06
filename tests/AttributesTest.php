@@ -11,9 +11,11 @@ use Spatie\Attributes\Tests\TestSupport\Attributes\PropertyAttribute;
 use Spatie\Attributes\Tests\TestSupport\Attributes\RepeatableAttribute;
 use Spatie\Attributes\Tests\TestSupport\Attributes\RepeatableTag;
 use Spatie\Attributes\Tests\TestSupport\Attributes\SimpleAttribute;
+use Spatie\Attributes\Tests\TestSupport\Attributes\VariadicAttribute;
 use Spatie\Attributes\Tests\TestSupport\ChildTestClass;
 use Spatie\Attributes\Tests\TestSupport\PlainClass;
 use Spatie\Attributes\Tests\TestSupport\TestClass;
+use Spatie\Attributes\Tests\TestSupport\VariadicClass;
 
 // get
 
@@ -458,8 +460,8 @@ it('can convert an attribute with default values to an array', function () {
 
 it('can convert an attribute with variadic arguments to an array', function () {
     $results = Attributes::find(
-        Spatie\Attributes\Tests\TestSupport\VariadicClass::class,
-        Spatie\Attributes\Tests\TestSupport\Attributes\VariadicAttribute::class,
+        VariadicClass::class,
+        VariadicAttribute::class,
     );
 
     expect($results[0]->toArray())->toBe(['tags' => ['featured', 'popular', 'trending']]);
