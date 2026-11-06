@@ -54,6 +54,8 @@ All documentation is available [on our documentation site](https://spatie.be/doc
 
 ## Testing
 
+PHP 8.4 or higher is required. The test suite uses Pest 5.
+
 ```bash
 composer test
 ```
