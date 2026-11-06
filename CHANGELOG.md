@@ -2,6 +2,19 @@
 
 All notable changes to `php-attribute-reader` will be documented in this file.
 
+## 1.2.1 - 2026-11-06
+
+### What's Changed
+
+- Fix release-tag formatting checks in https://github.com/spatie/php-attribute-reader/pull/8: tags now run Pint's read-only test mode and never attempt an automatic formatting commit. Branch pushes retain automatic formatting and commits.
+- Normalize the existing variadic-attribute test imports with Pint, without changing runtime code or assertions.
+
+PHP 8.4+ remains required, as announced in 1.2.0. There are no new support drops or public API changes.
+
+The 1.2.0 tag is unchanged. Its tests passed, but its historical styling job failed when trying to push from a detached tag checkout; this patch fixes that workflow for new releases.
+
+**Full Changelog**: https://github.com/spatie/php-attribute-reader/compare/1.2.0...1.2.1
+
 ## 1.2.0 - 2026-11-06
 
 ### Requirements
