@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '**.php'
+      - '.github/workflows/fix-php-code-style-issues-pint.yml'
 
 permissions:
   contents: write
@@ -19,10 +20,13 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Fix PHP code style issues
+      - name: Fix or check PHP code style issues
         uses: aglipanci/laravel-pint-action@2.6
+        with:
+          testMode: ${{ github.ref_type == 'tag' }}
 
       - name: Commit changes
+        if: github.ref_type == 'branch'
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Fix styling
